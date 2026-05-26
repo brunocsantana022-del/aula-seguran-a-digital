@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Demonstração - Segurança Digital</title>
+  <style>
+    body { font-family: Arial; text-align: center; padding: 20px; background: #1a1a2e; color: white; }
+    video { width: 300px; border-radius: 10px; margin: 10px; }
+    #info { background: #16213e; padding: 15px; border-radius: 8px; margin: 10px auto; max-width: 400px; }
+    button { background: #0f3460; color: white; border: none; padding: 12px 24px;
+             border-radius: 6px; cursor: pointer; font-size: 16px; margin: 5px; }
+  </style>
+</head>
+<body>
+  <h1>🔐 Verificação de Segurança</h1>
+  <p>Clique para continuar...</p>
+  <button onclick="iniciar()">Acessar Conteúdo</button>
+
+  <div id="resultado" style="display:none">
+    <video id="video" autoplay muted></video>
+    <div id="info">
+      <h3>📍 Sua localização:</h3>
+      <p id="coords">Obtendo...</p>
+    </div>
+    <p style="color: #ff6b6b; font-weight: bold;">
+      ⚠️ ATENÇÃO: Isso é uma demonstração didática!<br>
+      Câmera e localização estão sendo acessadas.
+    </p>
+  </div>
+
+  <script>
+    function iniciar() {
+      document.getElementById('resultado').style.display = 'block';
+
+      // Acessa a câmera
+      navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        .then(stream => {
+          document.getElementById('video').srcObject = stream;
+        })
+        .catch(err => console.log('Câmera negada:', err));
+
+      // Acessa a localização
+      navigator.geolocation.getCurrentPosition(pos => {
+        const { latitude, longitude } = pos.coords;
+        document.getElementById('coords').innerHTML =
+          `Lat: ${latitude.toFixed(5)}<br>Lon: ${longitude.toFixed(5)}<br>
+           <a href="https://maps.google.com/?q=${latitude},${longitude}"
+              target="_blank" style="color:#4fc3f7">Ver no Maps</a>`;
+      });
+    }
+  </script>
+</body>
+</html>
